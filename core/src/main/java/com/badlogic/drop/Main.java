@@ -6,9 +6,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Color;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
@@ -30,7 +32,7 @@ public class Main implements ApplicationListener {
         music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
 
         spriteBatch = new SpriteBatch();
-        viewport = new FitViewport(8, 5);//ウィンドウの大きさ
+        viewport = new FitViewport(8, 5);//ウィンドウの大きさアスペクト比
     }
 
     @Override
@@ -44,11 +46,25 @@ public class Main implements ApplicationListener {
 
     @Override
     public void render() {
-        // input();
-        // losic();
-        // draw();
+        input();
+        losic();
+        draw();
     }
 
+    private void input(){
+
+    }
+    private void losic(){
+
+    }
+    private void draw(){
+        ScreenUtils.clear(Color.BLACK);
+        viewport.apply();
+        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+        spriteBatch.begin();
+
+        spriteBatch.end();
+    }
     @Override
     public void pause() {
         // Invoked when your application is paused.
