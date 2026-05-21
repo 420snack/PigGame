@@ -1,17 +1,18 @@
 package com.badlogic.drop;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.Color;
-
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
     Texture backgroundTexture;
@@ -21,6 +22,9 @@ public class Main implements ApplicationListener {
     Music music;
     SpriteBatch spriteBatch;
     FitViewport viewport;
+    Sprite bucketSprite;
+    Vector2 touchPos;
+    Array<Sprite> dropSprites;
 
     @Override
     public void create() {//素材いれてる
@@ -33,6 +37,11 @@ public class Main implements ApplicationListener {
 
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(8, 5);//ウィンドウの大きさアスペクト比
+
+        bucketSprite = new Sprite(bucketTexture);
+        bucketSprite.setSize(1,1);
+
+        touchPos = new Vector2();
     }
 
     @Override
@@ -52,17 +61,44 @@ public class Main implements ApplicationListener {
     }
 
     private void input(){
+        float speed = 4f;
+        float delta = Gdx.graphics.getDeltaTime();
 
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){//右左で移動
+            bucketSprite.translateX(speed * delta);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+             bucketSprite.translateX(-speed * delta);
+        }
+
+        if(Gdx.input.isTouched()){//画面タッチで移動
+            touchPos.set(Gdx.input.getX(),Gdx.input.getY());
+            viewport.unproject(touchPos);
+            bucketSprite.setCenterX(touchPos.x);
+        }
+        
     }
     private void losic(){
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
 
+        float bucketWidth = bucketSprite.getWidth();
+        float bucketHeight = bucketSprite.getHeight();
+
+        bucketSprite.setX(MathUtils.clamp(bucketSprite.getX(), 0, worldWidth - bucketWidth)); 
     }
-    private void draw(){
+    private void draw(){//背景関連
         ScreenUtils.clear(Color.BLACK);
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
 
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
+
+        spriteBatch.draw(backgroundTexture,0,0,worldWidth,worldHeight);
+        //spriteBatch.draw(bucketTexture,0,0,1,1);
+        bucketSprite.draw(spriteBatch);
+        
         spriteBatch.end();
     }
     @Override
