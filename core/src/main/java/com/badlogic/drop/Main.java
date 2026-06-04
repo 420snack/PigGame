@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -25,6 +26,9 @@ public class Main implements ApplicationListener {
     Sprite bucketSprite;
     Vector2 touchPos;
     Array<Sprite> dropSprites;
+    float dropTimer;
+    Rectangle bucketRectangle;
+    Rectangle dropRectangle;
 
     @Override
     public void create() {//素材いれてる
@@ -42,6 +46,10 @@ public class Main implements ApplicationListener {
         bucketSprite.setSize(1,1);
 
         touchPos = new Vector2();
+
+        dropSprites = new Array<>();
+        bucketRectangle = new Rectangle();
+        dropRectangle = new Rectangle();
     }
 
     @Override
@@ -80,11 +88,34 @@ public class Main implements ApplicationListener {
     private void losic(){
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
-
         float bucketWidth = bucketSprite.getWidth();
         float bucketHeight = bucketSprite.getHeight();
-
+        
         bucketSprite.setX(MathUtils.clamp(bucketSprite.getX(), 0, worldWidth - bucketWidth)); 
+
+        float delta = Gdx.graphics.getDeltaTime();
+
+        bucketRectangle.set(bucketSprite.getX(),bucketSprite.getY(),bucketWidth,bucketHeight);
+
+        for(int i = dropSprites.size - 1; i >= 0; i--){
+            Sprite dropSprite = dropSprites.get(i);
+            float dropWidth = dropSprite.getWidth();
+            float dropHeight = dropSprite.getHeight();
+
+            dropSprite.translateY(-2f * delta);
+            dropRectangle.set(dropSprite.getX(),dropSprite.getY(),dropWidth,dropHeight);
+
+            if(dropSprite.getY() < -dropHeight)dropSprites.removeIndex(i);
+            else if (bucketRectangle.overlaps(dropRectangle)){
+                dropSprites.removeIndex(i);
+            }
+        }
+        
+        dropTimer += delta;
+        if(dropTimer > 1f){
+            dropTimer = 0;
+            createDroplet();
+        }
     }
     private void draw(){//背景関連
         ScreenUtils.clear(Color.BLACK);
@@ -98,6 +129,9 @@ public class Main implements ApplicationListener {
         spriteBatch.draw(backgroundTexture,0,0,worldWidth,worldHeight);
         //spriteBatch.draw(bucketTexture,0,0,1,1);
         bucketSprite.draw(spriteBatch);
+        for(Sprite dropSprite : dropSprites){//雨描く
+            dropSprite.draw(spriteBatch);
+        }
         
         spriteBatch.end();
     }
@@ -114,5 +148,17 @@ public class Main implements ApplicationListener {
     @Override
     public void dispose() {
         // Destroy application's resources here.
+    }
+    private void createDroplet(){
+        float dropWidth = 1;
+        float dropHeight = 1;
+        float worldWidth = viewport.getWorldWidth();
+        float worldHeight = viewport.getWorldHeight();
+        
+        Sprite dropSprite = new Sprite(dropTexture);
+        dropSprite.setSize(dropWidth, dropHeight);
+        dropSprite.setX(MathUtils.random(0f, worldWidth - dropWidth));//雨のx座標がランダムになる
+        dropSprite.setY(worldHeight);
+        dropSprites.add(dropSprite);//list に入れる
     }
 }
