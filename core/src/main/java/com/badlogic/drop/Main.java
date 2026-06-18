@@ -21,11 +21,12 @@ public class Main implements ApplicationListener {
     //Music music;
     SpriteBatch spriteBatch;
     FitViewport viewport;
-    Sprite bucketSprite;
+    Sprite pigSprite;
     Vector2 touchPos;
-    Array<Sprite> dropSprites;
+    Array<Sprite> barrageSprites;
+    Sprite niwatoriSprite;
     float dropTimer;
-    Rectangle bucketRectangle;
+    Rectangle pigRectangle;
     Rectangle dropRectangle;
 
     @Override
@@ -37,11 +38,12 @@ public class Main implements ApplicationListener {
 
         // dropSound = Gdx.audio.newSound(Gdx.files.internal("sounds/drop.mp3"));
         // music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-
+        pigSprite = new Sprite(pigTexture);
+        niwatoriSprite = new Sprite(niwatoriTexture);
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(8, 5);//ウィンドウの大きさアスペクト比
-
-        
+        touchPos = new Vector2();
+        //dropSprites = new Array<Sprite>();
     }
 
     @Override
@@ -65,15 +67,16 @@ public class Main implements ApplicationListener {
         float delta = Gdx.graphics.getDeltaTime();
 
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){//右左で移動
-            //bucketSprite.translateX(speed * delta);
+            pigSprite.translateX(speed * delta);
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-             //bucketSprite.translateX(-speed * delta);
+            pigSprite.translateX(-speed * delta);
         }
+
 
         if(Gdx.input.isTouched()){//画面タッチで移動
             touchPos.set(Gdx.input.getX(),Gdx.input.getY());
             viewport.unproject(touchPos);
-            //bucketSprite.setCenterX(touchPos.x);
+            //pigSprite.setCenterX(touchPos.x);
         }
         
     }
@@ -96,11 +99,14 @@ public class Main implements ApplicationListener {
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
+        pigSprite.draw(spriteBatch);
+        niwatoriSprite.draw(spriteBatch);
+        //dropSprites.draw(spriteBatch);
 
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
+        //float worldWidth = viewport.getWorldWidth();
+        //float worldHeight = viewport.getWorldHeight();
 
-        spriteBatch.draw(backgroundTexture,0,0,worldWidth,worldHeight);
+        //spriteBatch.draw(backgroundTexture,0,0,worldWidth,worldHeight);
         //spriteBatch.draw(bucketTexture,0,0,1,1);
         //bucketSprite.draw(spriteBatch);
         
