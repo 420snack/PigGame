@@ -1,7 +1,6 @@
 package com.badlogic.drop;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,10 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.pig.Pig;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
     Texture backgroundTexture;
-    Texture pigTexture;
+    // Texture pigTexture;
     Texture bulletTexture;
     Texture niwatoriTexture;
     //Sound dropSound;
@@ -28,18 +28,24 @@ public class Main implements ApplicationListener {
     float dropTimer;
     Rectangle pigRectangle;
     Rectangle dropRectangle;
+    Pig pig;
 
     @Override
     public void create() {//素材いれてる
+        pig = new Pig();
         //backgroundTexture = new Texture
-        pigTexture = new Texture("Pig.png");
+        // pigTexture = new Texture("Pig.png");
         niwatoriTexture = new Texture("Kokekokko.png");
         bulletTexture = new Texture("Sinju.png");
 
         // dropSound = Gdx.audio.newSound(Gdx.files.internal("sounds/drop.mp3"));
         // music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-        pigSprite = new Sprite(pigTexture);
+        // pigSprite = new Sprite(pigTexture);
+        // pigSprite.setSize(0.2f,0.2f );
+        // pigSprite.setPosition(1f, 1f);
         niwatoriSprite = new Sprite(niwatoriTexture);
+        niwatoriSprite.setSize(1f, 1f);
+        niwatoriSprite.setPosition(2f, 2f);
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(8, 5);//ウィンドウの大きさアスペクト比
         touchPos = new Vector2();
@@ -63,15 +69,6 @@ public class Main implements ApplicationListener {
     }
 
     private void input(){
-        float speed = 4f;
-        float delta = Gdx.graphics.getDeltaTime();
-
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){//右左で移動
-            pigSprite.translateX(speed * delta);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-            pigSprite.translateX(-speed * delta);
-        }
-
 
         if(Gdx.input.isTouched()){//画面タッチで移動
             touchPos.set(Gdx.input.getX(),Gdx.input.getY());
