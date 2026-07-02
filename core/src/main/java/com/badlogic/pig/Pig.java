@@ -4,11 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 
 public class Pig {
     Sprite pigSprite;
     Texture pigTexture;
-
     
     public Pig(){
         pigTexture = new Texture("Pig.png");
@@ -32,4 +33,7 @@ public class Pig {
         }
     }
     
+    public void draw(SpriteBatch sb){
+        pigSprite.draw(sb);
+    }
 }

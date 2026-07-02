@@ -21,7 +21,6 @@ public class Main implements ApplicationListener {
     //Music music;
     SpriteBatch spriteBatch;
     FitViewport viewport;
-    Sprite pigSprite;
     Vector2 touchPos;
     Array<Sprite> barrageSprites;
     Sprite niwatoriSprite;
@@ -75,7 +74,7 @@ public class Main implements ApplicationListener {
             viewport.unproject(touchPos);
             //pigSprite.setCenterX(touchPos.x);
         }
-        
+        pig.input();//pigが持ってる移動するためのコードを呼び出す
     }
     private void losic(){
         float worldWidth = viewport.getWorldWidth();
@@ -96,7 +95,7 @@ public class Main implements ApplicationListener {
         viewport.apply();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
-        pigSprite.draw(spriteBatch);
+        pig.draw(spriteBatch);
         niwatoriSprite.draw(spriteBatch);
         //dropSprites.draw(spriteBatch);
 
