@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.niwatori.Niwatori;
 import com.badlogic.pig.Pig;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
@@ -28,23 +29,20 @@ public class Main implements ApplicationListener {
     Rectangle pigRectangle;
     Rectangle dropRectangle;
     Pig pig;
+    Niwatori niwatori;
 
     @Override
     public void create() {//素材いれてる
         pig = new Pig();
+        niwatori = new Niwatori();
         //backgroundTexture = new Texture
         // pigTexture = new Texture("Pig.png");
-        niwatoriTexture = new Texture("Kokekokko.png");
+        
         bulletTexture = new Texture("Sinju.png");
 
         // dropSound = Gdx.audio.newSound(Gdx.files.internal("sounds/drop.mp3"));
         // music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         // pigSprite = new Sprite(pigTexture);
-        // pigSprite.setSize(0.2f,0.2f );
-        // pigSprite.setPosition(1f, 1f);
-        niwatoriSprite = new Sprite(niwatoriTexture);
-        niwatoriSprite.setSize(1f, 1f);
-        niwatoriSprite.setPosition(2f, 2f);
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(8, 5);//ウィンドウの大きさアスペクト比
         touchPos = new Vector2();
@@ -79,16 +77,7 @@ public class Main implements ApplicationListener {
     private void losic(){
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
-        //float bucketWidth = bucketSprite.getWidth();
-        //float bucketHeight = bucketSprite.getHeight();
-        
-        //bucketSprite.setX(MathUtils.clamp(bucketSprite.getX(), 0, worldWidth - bucketWidth)); 
-
-        float delta = Gdx.graphics.getDeltaTime();
-
-        //bucketRectangle.set(bucketSprite.getX(),bucketSprite.getY(),bucketWidth,bucketHeight);
-        
-        dropTimer += delta;
+        niwatori.losic();
     }
     private void draw(){//背景関連
         ScreenUtils.clear(Color.BLACK);
@@ -96,7 +85,7 @@ public class Main implements ApplicationListener {
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
         pig.draw(spriteBatch);
-        niwatoriSprite.draw(spriteBatch);
+        niwatori.draw(spriteBatch);
         //dropSprites.draw(spriteBatch);
 
         //float worldWidth = viewport.getWorldWidth();
