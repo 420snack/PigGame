@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class Niwatori{
     Sprite niwatoriSprite;
@@ -20,7 +22,7 @@ public class Niwatori{
         niwatoriSprite = new Sprite(niwatoriTexture);
         niwatoriSprite.setSize(1f,1f );
         niwatoriSprite.setPosition(7f, 4f);
-        //TODO 途中で止めるかランダム２秒おきぐらい
+        
     }
 
     public void draw(SpriteBatch sb){
@@ -30,13 +32,22 @@ public class Niwatori{
     public void losic(){
         float delta = Gdx.graphics.getDeltaTime();
         timer += delta;
-        niwatoriSprite.translateX(speed * direction * delta);
         if (timer >= interval) {
-            direction = direction * -1;//向き反転
+            direction = MathUtils.randomBoolean()? 1:-1;//向き反転
+            System.out.println(direction);
             timer = 0;
-        }else{
-
         }
     }
 
+    public void input(Viewport viewport){
+        float delta = Gdx.graphics.getDeltaTime();
+        float nextX = niwatoriSprite.getX() + speed * direction * delta;
+        if(nextX >= 0 && nextX + niwatoriSprite.getWidth() <= viewport.getWorldWidth()){
+            niwatoriSprite.setX(nextX);
+        }
+
+        if(speed <= niwatoriSprite.getX() && viewport.getWorldWidth() - speed >= niwatoriSprite.getX()){
+                    niwatoriSprite.translateX(speed * direction * delta);
+        }
+    }
 }

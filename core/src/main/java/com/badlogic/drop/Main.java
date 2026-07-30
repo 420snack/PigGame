@@ -1,6 +1,5 @@
 package com.badlogic.drop;
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -37,9 +36,6 @@ public class Main implements ApplicationListener {
         niwatori = new Niwatori();
         //backgroundTexture = new Texture
         // pigTexture = new Texture("Pig.png");
-        
-        bulletTexture = new Texture("Sinju.png");
-
         // dropSound = Gdx.audio.newSound(Gdx.files.internal("sounds/drop.mp3"));
         // music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         // pigSprite = new Sprite(pigTexture);
@@ -66,17 +62,10 @@ public class Main implements ApplicationListener {
     }
 
     private void input(){
-
-        if(Gdx.input.isTouched()){//画面タッチで移動
-            touchPos.set(Gdx.input.getX(),Gdx.input.getY());
-            viewport.unproject(touchPos);
-            //pigSprite.setCenterX(touchPos.x);
-        }
         pig.input();//pigが持ってる移動するためのコードを呼び出す
+        niwatori.input(viewport);
     }
     private void losic(){
-        float worldWidth = viewport.getWorldWidth();
-        float worldHeight = viewport.getWorldHeight();
         niwatori.losic();
     }
     private void draw(){//背景関連
