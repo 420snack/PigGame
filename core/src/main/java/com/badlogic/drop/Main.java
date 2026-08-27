@@ -67,6 +67,7 @@ public class Main implements ApplicationListener {
     }
     private void losic(){
         niwatori.losic();
+        pig.losic();
     }
     private void draw(){//背景関連
         ScreenUtils.clear(Color.BLACK);

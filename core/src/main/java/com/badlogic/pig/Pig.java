@@ -5,12 +5,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 
 public class Pig {
     Sprite pigSprite;
     Texture pigTexture;
-    
+    int limit = 1;
+
     public Pig(){
         pigTexture = new Texture("Pig.png");
         pigSprite = new Sprite(pigTexture);
@@ -35,5 +37,12 @@ public class Pig {
     
     public void draw(SpriteBatch sb){
         pigSprite.draw(sb);
+    }
+
+    public void losic(){
+        if(limit == 1){
+           new PigPearl(new Vector2(pigSprite.getX(),pigSprite.getY()));
+           limit--;//limit -1
+        }
     }
 }
